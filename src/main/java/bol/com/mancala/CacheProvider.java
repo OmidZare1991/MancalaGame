@@ -1,4 +1,4 @@
-package bol.com.mankala;
+package bol.com.mancala;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import org.springframework.beans.factory.annotation.Autowired;

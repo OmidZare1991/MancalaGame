@@ -1,4 +1,4 @@
-package bol.com.mankala;
+package bol.com.mancala;
 
 public class MancalaConstants {
 

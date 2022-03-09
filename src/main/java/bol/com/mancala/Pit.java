@@ -1,14 +1,14 @@
-package bol.com.mankala;
+package bol.com.mancala;
 
 /**
- * MancalaPit class keeps information about each Pit including the pit index and the number of stones inside that pit.
+ * Pit class keeps information about each Pit including the pit index and the number of stones inside that pit.
  */
 
-public class MancalaPit {
+public class Pit {
     private Integer id;
     private Integer stones;
 
-    public MancalaPit(Integer id, Integer stones) {
+    public Pit(Integer id, Integer stones) {
         this.id = id;
         this.stones = stones;
     }
@@ -20,11 +20,11 @@ public class MancalaPit {
         this.stones = 0;
     }
 
-    public void sow () {
+    public void sow() {
         this.stones++;
     }
 
-    public void addStones (Integer stones){
+    public void addStones(Integer stones){
         this.stones+= stones;
     }
 

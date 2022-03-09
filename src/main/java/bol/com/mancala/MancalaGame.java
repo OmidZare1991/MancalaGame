@@ -1,16 +1,16 @@
-package bol.com.mankala;
+package bol.com.mancala;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-import static bol.com.mankala.MancalaConstants.*;
+import static bol.com.mancala.MancalaConstants.*;
 
 public class MancalaGame implements Serializable {
 
     private String id;
 
-    private List<MancalaPit> pits;
+    private List<Pit> pits;
 
     private Players playerTurn;
 
@@ -22,20 +22,20 @@ public class MancalaGame implements Serializable {
 
     public MancalaGame(int pitStones) {
         this.pits = Arrays.asList(
-                new MancalaPit(FIRST_PIT_PLAYER_A, pitStones),
-                new MancalaPit(SECOND_PIT_PLAYER_A, pitStones),
-                new MancalaPit(THIRD_PIT_PLAYER_A, pitStones),
-                new MancalaPit(FORTH_PIT_PLAYER_A, pitStones),
-                new MancalaPit(FIFTH_PIT_PLAYER_A, pitStones),
-                new MancalaPit(SIXTH_PIT_PLAYER_A, pitStones),
-                new MancalaBigPit(RIGHT_BIG_PIT_ID),
-                new MancalaPit(FIRST_PIT_PLAYER_B, pitStones),
-                new MancalaPit(SECOND_PIT_PLAYER_B, pitStones),
-                new MancalaPit(THIRD_PIT_PLAYER_B, pitStones),
-                new MancalaPit(FORTH_PIT_PLAYER_B, pitStones),
-                new MancalaPit(FIFTH_PIT_PLAYER_B, pitStones),
-                new MancalaPit(SIXTH_PIT_PLAYER_B, pitStones),
-                new MancalaBigPit(LEFT_BIG_PIT_ID));
+                new Pit(FIRST_PIT_PLAYER_A, pitStones),
+                new Pit(SECOND_PIT_PLAYER_A, pitStones),
+                new Pit(THIRD_PIT_PLAYER_A, pitStones),
+                new Pit(FORTH_PIT_PLAYER_A, pitStones),
+                new Pit(FIFTH_PIT_PLAYER_A, pitStones),
+                new Pit(SIXTH_PIT_PLAYER_A, pitStones),
+                new BigPit(RIGHT_BIG_PIT_ID),
+                new Pit(FIRST_PIT_PLAYER_B, pitStones),
+                new Pit(SECOND_PIT_PLAYER_B, pitStones),
+                new Pit(THIRD_PIT_PLAYER_B, pitStones),
+                new Pit(FORTH_PIT_PLAYER_B, pitStones),
+                new Pit(FIFTH_PIT_PLAYER_B, pitStones),
+                new Pit(SIXTH_PIT_PLAYER_B, pitStones),
+                new BigPit(LEFT_BIG_PIT_ID));
     }
 
 
@@ -45,7 +45,7 @@ public class MancalaGame implements Serializable {
     }
 
     // returns the corresponding pit of particular index
-    public MancalaPit getPit(Integer pitIndex) throws MancalaException {
+    public Pit getPit(Integer pitIndex) throws MancalaException {
         try {
             return this.pits.get(pitIndex-1);
         }catch (Exception e){

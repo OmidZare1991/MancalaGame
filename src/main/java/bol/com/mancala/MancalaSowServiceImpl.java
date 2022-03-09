@@ -1,4 +1,4 @@
-package bol.com.mankala;
+package bol.com.mancala;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ public class MancalaSowServiceImpl implements MancalaSowApi {
      */
     @Override
     public MancalaGame sow(MancalaGame game, int pitIndex) {
-        // No movement on Big pits
+        // No movement on big pits
         if (pitIndex == MancalaConstants.RIGHT_BIG_PIT_ID || pitIndex == MancalaConstants.LEFT_BIG_PIT_ID) {
             LOGGER.debug("no movement on big pits, id {}", pitIndex);
             return game;
@@ -42,7 +42,7 @@ public class MancalaSowServiceImpl implements MancalaSowApi {
             return game;
         }
 
-        MancalaPit mancalaSelectedPit = game.getPit(pitIndex);
+        Pit mancalaSelectedPit = game.getPit(pitIndex);
 
         Integer stones = mancalaSelectedPit.getStones();
         // no movement for the empty pit
@@ -59,6 +59,9 @@ public class MancalaSowServiceImpl implements MancalaSowApi {
 
         //sow all stones except the last one
         IntStream.range(0, stones - 1).forEach(index -> sowRight(game, false));
+
+        sowRight(game, true);
+
         int currentPitIndex = game.getCurrentPitIndex();
 
         // change the player's turn if the last sow was not on any of pit big pits (left or right)
@@ -68,7 +71,7 @@ public class MancalaSowServiceImpl implements MancalaSowApi {
         return game;
     }
 
-    public void sowRight(MancalaGame game, boolean isLastStone) {
+    private void sowRight(MancalaGame game, boolean isLastStone) {
 
         // the pitIndex to start sowing from
         int currentPitIndex = game.getCurrentPitIndex() % MancalaConstants.TOTAL_PITS + 1;
@@ -80,9 +83,9 @@ public class MancalaSowServiceImpl implements MancalaSowApi {
                 (currentPitIndex == MancalaConstants.LEFT_BIG_PIT_ID && player == Players.PLAYER_A)) {
 
             currentPitIndex = currentPitIndex % MancalaConstants.TOTAL_PITS + 1;
-            game.setCurrentPitIndex(currentPitIndex);
         }
-        MancalaPit pit = game.getPit(currentPitIndex);
+        game.setCurrentPitIndex(currentPitIndex);
+        Pit pit = game.getPit(currentPitIndex);
 
         if (!isLastStone || currentPitIndex == MancalaConstants.RIGHT_BIG_PIT_ID ||
                 currentPitIndex == MancalaConstants.LEFT_BIG_PIT_ID) {
@@ -92,7 +95,7 @@ public class MancalaSowServiceImpl implements MancalaSowApi {
 
         // It's the last stone and we need to check the opposite player's pit status
 
-        MancalaPit oppositePit = game.getPit(MancalaConstants.TOTAL_PITS - currentPitIndex);
+        Pit oppositePit = game.getPit(MancalaConstants.TOTAL_PITS - currentPitIndex);
 
         //when the last stone lands in an own empty pit,the player captures his own stones and all stones in the opposite pit
         //and puts them in his big pit
@@ -100,7 +103,7 @@ public class MancalaSowServiceImpl implements MancalaSowApi {
             Integer oppositeStones = oppositePit.getStones();
             oppositePit.clear();
             Integer bigPitIndex = currentPitIndex < MancalaConstants.RIGHT_BIG_PIT_ID ? MancalaConstants.RIGHT_BIG_PIT_ID : MancalaConstants.LEFT_BIG_PIT_ID;
-            MancalaPit bigPit = game.getPit(bigPitIndex);
+            Pit bigPit = game.getPit(bigPitIndex);
             bigPit.addStones(oppositeStones + 1);
             return;
         }

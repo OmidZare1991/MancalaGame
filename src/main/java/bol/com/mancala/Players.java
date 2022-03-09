@@ -1,4 +1,4 @@
-package bol.com.mankala;
+package bol.com.mancala;
 
 public enum Players {
     PLAYER_A("A"), PLAYER_B("B");

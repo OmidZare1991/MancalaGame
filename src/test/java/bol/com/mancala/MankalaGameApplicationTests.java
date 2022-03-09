@@ -1,4 +1,4 @@
-package bol.com.mankala;
+package bol.com.mancala;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

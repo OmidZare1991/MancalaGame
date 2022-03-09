@@ -1,4 +1,4 @@
-package bol.com.mankala;
+package bol.com.mancala;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
