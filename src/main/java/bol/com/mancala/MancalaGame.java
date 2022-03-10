@@ -3,17 +3,15 @@ package bol.com.mancala;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import static bol.com.mancala.MancalaConstants.*;
 
 public class MancalaGame implements Serializable {
 
     private String id;
-
     private List<Pit> pits;
-
     private Players playerTurn;
-
     private int currentPitIndex;
 
     public MancalaGame() {
@@ -40,18 +38,23 @@ public class MancalaGame implements Serializable {
 
 
     public MancalaGame(String id, Integer pitStones) {
-        this (pitStones);
+        this(pitStones);
         this.id = id;
     }
 
     // returns the corresponding pit of particular index
     public Pit getPit(Integer pitIndex) throws MancalaException {
         try {
-            return this.pits.get(pitIndex-1);
-        }catch (Exception e){
-            throw  new MancalaException("Invalid pitIndex:"+ pitIndex +" has given!");
+            return this.pits.get(pitIndex - 1);
+        } catch (Exception e) {
+            throw new MancalaException("Invalid pitIndex:" + pitIndex + " has given!");
         }
     }
+
+    public List<Pit> getPits() {
+        return pits;
+    }
+
 
     public Players getPlayerTurn() {
         return playerTurn;
@@ -75,5 +78,21 @@ public class MancalaGame implements Serializable {
 
     public void setCurrentPitIndex(int currentPitIndex) {
         this.currentPitIndex = currentPitIndex;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MancalaGame that = (MancalaGame) o;
+        return currentPitIndex == that.currentPitIndex &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(pits, that.pits) &&
+                playerTurn == that.playerTurn;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, pits, playerTurn, currentPitIndex);
     }
 }

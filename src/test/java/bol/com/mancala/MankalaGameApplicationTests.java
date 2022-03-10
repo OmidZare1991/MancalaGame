@@ -8,6 +8,7 @@ class MankalaGameApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }
