@@ -26,13 +26,13 @@ public class MancalaGameBuilder {
                 new Pit(FORTH_PIT_PLAYER_A, stonesCount),
                 new Pit(FIFTH_PIT_PLAYER_A, stonesCount),
                 new Pit(SIXTH_PIT_PLAYER_A, stonesCount),
-                new BigPit(RIGHT_BIG_PIT_ID),
                 new Pit(FIRST_PIT_PLAYER_B, stonesCount),
                 new Pit(SECOND_PIT_PLAYER_B, stonesCount),
                 new Pit(THIRD_PIT_PLAYER_B, stonesCount),
                 new Pit(FORTH_PIT_PLAYER_B, stonesCount),
                 new Pit(FIFTH_PIT_PLAYER_B, stonesCount),
                 new Pit(SIXTH_PIT_PLAYER_B, stonesCount),
+                new BigPit(RIGHT_BIG_PIT_ID),
                 new BigPit(LEFT_BIG_PIT_ID));
         return new MancalaGame(id, pits);
     }
