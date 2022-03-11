@@ -1,6 +1,6 @@
 package bol.com.mancala.service;
 
-import bol.com.mancala.MancalaGame;
+import bol.com.mancala.GameModel;
 import bol.com.mancala.MancalaSowServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,15 +17,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 public class MancalaSowServiceTest {
-    private MancalaGame game;
+    private GameModel game;
     private String id;
     @Autowired
     private MancalaSowServiceImpl sowService;
 
+
     @BeforeEach
     void setup() {
         this.id = UUID.randomUUID().toString();
-        this.game = new MancalaGame(id, 6);
+        this.game = new GameModel(id, 6);
         System.out.println(this.game.getPits());
     }
 
@@ -85,14 +86,15 @@ public class MancalaSowServiceTest {
         assertEquals("[{id=1, stones=8}, {id=2, stones=0}, {id=3, stones=0}, {id=4, stones=9}, {id=5, stones=9}, {id=6, stones=2}, {id=7, stones=14}, {id=8, stones=10}, {id=9, stones=0}, {id=10, stones=10}, {id=11, stones=0}, {id=12, stones=8}, {id=13, stones=0}, {id=14, stones=2}]", sowService.sow(this.game, 2).getPits().toString());
         assertEquals(PLAYER_B, this.game.getPlayerTurn());
     }
+
     @Test
     @DisplayName("Test when a player chooses his big pit to start sowing")
-    void testWhenBigPitChosenToSow(){
-        String game="[{id=1, stones=6}, {id=2, stones=6}, {id=3, stones=6}, {id=4, stones=6}, {id=5, stones=6}, {id=6, stones=6}, {id=7, stones=0}, {id=8, stones=6}, {id=9, stones=6}, {id=10, stones=6}, {id=11, stones=6}, {id=12, stones=6}, {id=13, stones=6}, {id=14, stones=0}]";
+    void testWhenBigPitChosenToSow() {
+        String game = "[{id=1, stones=6}, {id=2, stones=6}, {id=3, stones=6}, {id=4, stones=6}, {id=5, stones=6}, {id=6, stones=6}, {id=7, stones=0}, {id=8, stones=6}, {id=9, stones=6}, {id=10, stones=6}, {id=11, stones=6}, {id=12, stones=6}, {id=13, stones=6}, {id=14, stones=0}]";
         assertEquals(game, sowService.sow(this.game, 7).getPits().toString());
         // because it is the start of game and playerA wants to start the game, game.PlayerTurn() is null.
-        assertEquals(null,this.game.getPlayerTurn());
-        assertEquals(game,this.game.getPits().toString());
+        assertEquals(null, this.game.getPlayerTurn());
+        assertEquals(game, this.game.getPits().toString());
     }
 
 }

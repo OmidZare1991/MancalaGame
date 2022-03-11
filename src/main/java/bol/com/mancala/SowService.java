@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class SowService {
 
-    public void sowRight(MancalaGame game, boolean isLastStone) {
+    public void sowRight(GameModel game, boolean isLastStone) {
 
         // the pitIndex to start sowing from
         int currentPitIndex = game.getCurrentPitIndex() % MancalaConstants.TOTAL_PITS + 1;

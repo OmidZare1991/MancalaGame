@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 public class GameService {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameService.class);
 
-    public MancalaGame createInstance(String id, Integer stones) {
+    public GameModel createInstance(String id, Integer stones) {
         LOGGER.debug("Game instance with id {} and stones {} created", id, stones);
-        return new MancalaGame(id, stones);
+        return new GameModel(id, stones);
     }
 }

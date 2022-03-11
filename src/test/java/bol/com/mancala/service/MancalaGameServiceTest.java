@@ -1,7 +1,8 @@
 package bol.com.mancala.service;
 
-import bol.com.mancala.MancalaGame;
+import bol.com.mancala.GameModel;
 import bol.com.mancala.GameService;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,13 +18,14 @@ public class MancalaGameServiceTest {
     GameService mancalaGameService;
 
     @Test
+    @DisplayName(value = "Test when game instance is created")
     void testMancalaGameService() {
         String id = UUID.randomUUID().toString();
-        MancalaGame gameInstance = mancalaGameService.createInstance(id, 6);
+        GameModel gameInstance = mancalaGameService.createInstance(id, 6);
 
 
         assertNull(gameInstance.getPlayerTurn());
-        assertEquals(id, gameInstance.getId());
+        assertEquals(id, gameInstance.getGameId());
         assertEquals(0, gameInstance.getCurrentPitIndex());
 
         assertEquals(6, gameInstance.getPit(1).getStones());

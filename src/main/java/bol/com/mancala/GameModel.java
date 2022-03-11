@@ -7,18 +7,18 @@ import java.util.Objects;
 
 import static bol.com.mancala.MancalaConstants.*;
 
-public class MancalaGame implements Serializable {
+public class GameModel implements Serializable {
 
-    private String id;
+    private String gameId;
     private List<Pit> pits;
     private Players playerTurn;
     private int currentPitIndex;
 
-    public MancalaGame() {
+    public GameModel() {
         this(DEFAULT_PIT_STONES);
     }
 
-    public MancalaGame(int pitStones) {
+    public GameModel(int pitStones) {
         this.pits = Arrays.asList(
                 new Pit(FIRST_PIT_PLAYER_A, pitStones),
                 new Pit(SECOND_PIT_PLAYER_A, pitStones),
@@ -34,12 +34,13 @@ public class MancalaGame implements Serializable {
                 new Pit(FIFTH_PIT_PLAYER_B, pitStones),
                 new Pit(SIXTH_PIT_PLAYER_B, pitStones),
                 new BigPit(LEFT_BIG_PIT_ID));
+
     }
 
 
-    public MancalaGame(String id, Integer pitStones) {
+    public GameModel(String gameId, Integer pitStones) {
         this(pitStones);
-        this.id = id;
+        this.gameId = gameId;
     }
 
     // returns the corresponding pit of particular index
@@ -64,12 +65,12 @@ public class MancalaGame implements Serializable {
         this.playerTurn = playerTurn;
     }
 
-    public String getId() {
-        return id;
+    public String getGameId() {
+        return gameId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setGameId(String gameId) {
+        this.gameId = gameId;
     }
 
     public int getCurrentPitIndex() {
@@ -84,15 +85,25 @@ public class MancalaGame implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MancalaGame that = (MancalaGame) o;
+        GameModel that = (GameModel) o;
         return currentPitIndex == that.currentPitIndex &&
-                Objects.equals(id, that.id) &&
+                Objects.equals(gameId, that.gameId) &&
                 Objects.equals(pits, that.pits) &&
                 playerTurn == that.playerTurn;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, pits, playerTurn, currentPitIndex);
+        return Objects.hash(gameId, pits, playerTurn, currentPitIndex);
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "gameId='" + gameId + '\'' +
+                ", pits=" + pits +
+                ", playerTurn=" + playerTurn +
+                ", currentPitIndex=" + currentPitIndex +
+                '}';
     }
 }

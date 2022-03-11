@@ -8,19 +8,19 @@ import org.springframework.stereotype.Service;
 import java.util.stream.IntStream;
 
 @Service
-public class MancalaSowServiceImpl implements MancalaGameService<MancalaGame, Integer> {
+public class MancalaSowServiceImpl implements MancalaGameService<GameModel, Integer> {
     private static final Logger LOGGER = LoggerFactory.getLogger(MancalaSowServiceImpl.class);
 
     @Autowired
     private SowService sowService;
 
     /**
-     * @param game     MancalaGame instance
+     * @param game     GameModel instance
      * @param pitIndex performing sowing the game on this requested pitIndex
-     * @return returning MancalaGame instance
+     * @return returning GameModel instance
      */
     @Override
-    public MancalaGame sow(MancalaGame game, Integer pitIndex) {
+    public GameModel sow(GameModel game, Integer pitIndex) {
         // No movement on big pits
         if (pitIndex == MancalaConstants.RIGHT_BIG_PIT_ID || pitIndex == MancalaConstants.LEFT_BIG_PIT_ID) {
             LOGGER.debug("no movement on big pits, id {}", pitIndex);

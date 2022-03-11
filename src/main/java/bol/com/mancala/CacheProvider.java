@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 public class CacheProvider {
     private static final Logger LOGGER = LoggerFactory.getLogger(CacheProvider.class);
     @Autowired
-    private Cache<String, MancalaGame> cache;
+    private Cache<String, GameModel> cache;
 
-    public void update(MancalaGame game) {
-        cache.put(game.getId(), game);
+    public void update(GameModel game) {
+        cache.put(game.getGameId(), game);
     }
 
-    public MancalaGame get(String id) {
-        MancalaGame game = cache.getIfPresent(id);
+    public GameModel get(String id) {
+        GameModel game = cache.getIfPresent(id);
         if (null == game) {
             LOGGER.error("game with id {} not found", id);
             throw new ResourceNotFoundException("game with id: " + id + " not found");

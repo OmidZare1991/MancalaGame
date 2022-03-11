@@ -1,11 +1,15 @@
 package bol.com.mancala;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Pit class keeps information about each Pit including the pit index and the number of stones inside that pit.
  */
 
 public class Pit {
+    @JsonProperty("id")
     private Integer id;
+    @JsonProperty("stones")
     private Integer stones;
 
     public Pit(Integer id, Integer stones) {
@@ -13,10 +17,11 @@ public class Pit {
         this.stones = stones;
     }
 
-    public boolean isEmpty (){
+    public boolean isEmpty() {
         return this.stones == 0;
     }
-    public void clear (){
+
+    public void clear() {
         this.stones = 0;
     }
 
@@ -24,8 +29,8 @@ public class Pit {
         this.stones++;
     }
 
-    public void addStones(Integer stones){
-        this.stones+= stones;
+    public void addStones(Integer stones) {
+        this.stones += stones;
     }
 
     public Integer getStones() {

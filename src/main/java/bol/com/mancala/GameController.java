@@ -4,15 +4,20 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.UUID;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping(value = "api",
+        consumes = MediaType.APPLICATION_JSON_VALUE,
+        produces = MediaType.APPLICATION_JSON_VALUE)
 public class GameController {
     private static final Logger LOGGER = LoggerFactory.getLogger(GameController.class);
 
@@ -25,26 +30,24 @@ public class GameController {
     @Autowired
     private CacheProvider cache;
 
-    @GetMapping(value = "game/instance")
+    @PostMapping(value = "/game/instance")
     @ApiOperation(value = "Endpoint to creat a new Mancala game instance",
             produces = "Application/JSON",
-            response = MancalaGame.class, httpMethod = "GET")
-    public ResponseEntity<MancalaGame> createGameInstance() {
-        String id = UUID.randomUUID().toString();
-        MancalaGame game = gameService.createInstance(id, configFile.getPitStones());
+            response = GameModel.class, httpMethod = "POST")
+    public ResponseEntity<GameModel> createGameInstance(@Valid @RequestBody GameInstanceApiRequestModel requestModel) {
+        String id = requestModel.getGameId();
+        GameModel game = gameService.createInstance(id, configFile.getPitStones());
         LOGGER.debug("Game instance {} with id {} created", game, id);
         cache.update(game);
-        return ResponseEntity.ok(game);
+        return new ResponseEntity<>(game, HttpStatus.OK);
     }
 
 
-
-
-    @PostMapping(value = "sow/{gameId}/{pitIndex}")
+    @PostMapping(value = "/sow")
     @ApiOperation(value = "Endpoint used for sowing the game. It also maintains the last state of game for consecutive calls",
             produces = "Application/JSON",
-            response = MancalaGame.class, httpMethod = "POST")
-    public ResponseEntity<MancalaGame> sow(@Valid @RequestBody SowApiRequestModel requestModel) {
+            response = GameModel.class, httpMethod = "POST")
+    public ResponseEntity<GameModel> sow(@Valid @RequestBody SowApiRequestModel requestModel) {
         Integer pitIndex = requestModel.getPitIndex();
 
         if (pitIndex == null ||
@@ -53,16 +56,16 @@ public class GameController {
         ) {
             throw new InputInvalidException(ErrorConstants.INPUT_INVALID_EXCEPTION);
         }
-        MancalaGame game = cache.get(requestModel.getGameId());
+        GameModel game = cache.get(requestModel.getGameId());
         game = sowService.sow(game, pitIndex);
         cache.update(game);
-        return ResponseEntity.ok(game);
+        return new ResponseEntity<>(game, HttpStatus.OK);
     }
 
-    @PostMapping(value = "{gameStatus}")
+    @PostMapping(value = "gameStatus")
     @ApiOperation(value = "Endpoint used to return the last state of the game",
-            produces = "Application/JSON", response = MancalaGame.class, httpMethod = "POST")
-    public ResponseEntity<MancalaGame> get(@Valid @RequestBody StatusApiRequestModel requestModel) {
-        return ResponseEntity.ok(cache.get(requestModel.getGameId()));
+            produces = "Application/JSON", response = GameModel.class, httpMethod = "POST")
+    public ResponseEntity<GameModel> get(@Valid @RequestBody StatusApiRequestModel requestModel) {
+        return new ResponseEntity<>(cache.get(requestModel.getGameId()), HttpStatus.OK);
     }
 }
