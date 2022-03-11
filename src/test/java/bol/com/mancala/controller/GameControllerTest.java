@@ -34,8 +34,6 @@ public class GameControllerTest {
     private String gameId;
     private final int numberOfPits = 6;
     private GameModel game;
-    private GameInstanceApiRequestModel gameInstanceReqModel;
-    private SowApiRequestModel sowApiRequestModel;
     private static String gameInstanceJsonString;
     private static String sowEndpointJsonString;
 
@@ -67,13 +65,13 @@ public class GameControllerTest {
     @Test
     @DisplayName(value = "Test when gameInstance endpoint is invoked")
     void testGameInstanceEndpoint() throws Exception {
-        this.gameInstanceReqModel = new GameInstanceApiRequestModel(this.gameId);
+        GameInstanceApiRequestModel gameInstanceReqModel = new GameInstanceApiRequestModel(this.gameId);
 
         when(gameService.createInstance(this.gameId, this.numberOfPits)).thenReturn(this.game);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/game/instance")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(this.gameInstanceReqModel)))
+                .content(this.objectMapper.writeValueAsString(gameInstanceReqModel)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(gameInstanceJsonString)).andReturn();
@@ -84,13 +82,13 @@ public class GameControllerTest {
     @DisplayName(value = "Test when sow endpoint is invoked")
     void testSowEndpoint() throws Exception {
 
-        this.sowApiRequestModel = new SowApiRequestModel(this.gameId, 1);
+        SowApiRequestModel sowApiRequestModel = new SowApiRequestModel(this.gameId, 1);
 
         when(cache.get(this.gameId)).thenReturn(this.game);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/sow")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(this.objectMapper.writeValueAsString(this.sowApiRequestModel)))
+                .content(this.objectMapper.writeValueAsString(sowApiRequestModel)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(content().json(sowEndpointJsonString)).andReturn();
