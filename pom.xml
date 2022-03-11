@@ -11,8 +11,8 @@
     <groupId>bol.com.mankala</groupId>
     <artifactId>mankala-game</artifactId>
     <version>1.0.0</version>
-    <name>mankala-game</name>
-    <description>Mankala game</description>
+    <name>Mankala game</name>
+    <description>Mankala game api</description>
     <properties>
         <java.version>1.8</java.version>
     </properties>
