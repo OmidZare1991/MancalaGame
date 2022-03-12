@@ -5,12 +5,20 @@ package com.bol.mancala.model;
  */
 
 public class Pit {
-    private Integer id;
     private Integer stones;
+    private Integer id;
 
     public Pit(Integer id, Integer stones) {
         this.id = id;
         this.stones = stones;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public boolean isEmpty() {

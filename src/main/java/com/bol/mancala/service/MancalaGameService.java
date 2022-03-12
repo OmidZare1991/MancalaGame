@@ -26,8 +26,8 @@ public class MancalaGameService {
     private MancalaGameRepository gameRepository;
 
 
-    public MancalaGame getNewGame(Integer pitsStoneCount) {
-        MancalaGame game = gameBuilder.getNew(pitsStoneCount);
+    public MancalaGame getNewGame(Integer pitStonesCount) {
+        MancalaGame game = gameBuilder.getNew(pitStonesCount);
         this.gameRepository.update(game);
         return game;
     }
@@ -48,7 +48,8 @@ public class MancalaGameService {
         ) {
             throw new InputInvalidException(ErrorConstants.INPUT_INVALID_EXCEPTION);
         }
-        game = this.sow(game, pitId);
+//        game = this.sow(game, pitId);
+        this.sow(game, pitId);
         gameRepository.update(game);
         return game;
     }

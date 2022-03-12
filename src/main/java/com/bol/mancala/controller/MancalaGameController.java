@@ -21,12 +21,12 @@ public class MancalaGameController {
     @Autowired
     private MancalaGameService gameService;
 
-    @GetMapping(value = "start")
+    @GetMapping(value = "start/{pitStones}")
     @ApiOperation(value = "Endpoint to creat a new Mancala game instance",
             produces = "Application/JSON",
-            response = MancalaGame.class, httpMethod = "POST")
-    public ResponseEntity<MancalaGame> createGameInstance() {
-        return new ResponseEntity<>(gameService.getNewGame(6), HttpStatus.OK);
+            response = MancalaGame.class, httpMethod = "GET")
+    public ResponseEntity<MancalaGame> createGameInstance(@PathVariable Integer pitStones) {
+        return new ResponseEntity<>(gameService.getNewGame(pitStones), HttpStatus.OK);
     }
 
 
@@ -38,9 +38,9 @@ public class MancalaGameController {
         return new ResponseEntity<>(this.gameService.playGame(dto.getGameId(), dto.getPitId()), HttpStatus.OK);
     }
 
-    @PostMapping(value = "last-state/{gameId}")
+    @GetMapping(value = "last-state/{gameId}")
     @ApiOperation(value = "Endpoint used to return the last state of the game",
-            produces = "Application/JSON", response = MancalaGame.class, httpMethod = "POST")
+            produces = "Application/JSON", response = MancalaGame.class, httpMethod = "GET")
     public ResponseEntity<MancalaGame> get(@Valid @PathVariable String gameId) {
         return new ResponseEntity<>(this.gameService.getGame(gameId), HttpStatus.OK);
     }

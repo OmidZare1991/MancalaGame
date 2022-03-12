@@ -3,16 +3,14 @@ package com.bol.mancala.model;
 import com.bol.mancala.common.Players;
 import com.bol.mancala.exception.MancalaException;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.Objects;
 
-public class MancalaGame implements Serializable {
+public class MancalaGame {
 
     private String id;
     private List<Pit> pits;
     private Players playerTurn;
-    private int currentPitIndex;
+    private Integer currentPitIndex;
 
     public MancalaGame(String id, List<Pit> pits) {
         this.id = id;
@@ -49,7 +47,7 @@ public class MancalaGame implements Serializable {
         this.id = id;
     }
 
-    public int getCurrentPitIndex() {
+    public Integer getCurrentPitIndex() {
         return currentPitIndex;
     }
 
@@ -57,29 +55,29 @@ public class MancalaGame implements Serializable {
         this.currentPitIndex = currentPitIndex;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MancalaGame that = (MancalaGame) o;
-        return currentPitIndex == that.currentPitIndex &&
-                Objects.equals(id, that.id) &&
-                Objects.equals(pits, that.pits) &&
-                playerTurn == that.playerTurn;
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        MancalaGame that = (MancalaGame) o;
+//        return currentPitIndex == that.currentPitIndex &&
+//                Objects.equals(id, that.id) &&
+//                Objects.equals(pits, that.pits) &&
+//                playerTurn == that.playerTurn;
+//    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, pits, playerTurn, currentPitIndex);
-    }
-
-    @Override
-    public String toString() {
-        return "{" +
-                "id='" + id + '\'' +
-                ", pits=" + pits +
-                ", playerTurn=" + playerTurn +
-                ", currentPitIndex=" + currentPitIndex +
-                '}';
-    }
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(id, pits, playerTurn, currentPitIndex);
+//    }
+//
+//    @Override
+//    public String toString() {
+//        return "{" +
+//                "id='" + id + '\'' +
+//                ", pits=" + pits +
+//                ", playerTurn=" + playerTurn +
+//                ", currentPitIndex=" + currentPitIndex +
+//                '}';
+//    }
 }

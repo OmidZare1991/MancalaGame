@@ -25,7 +25,7 @@ public class BeanConfiguration {
     public Cache caffeineConfig(ApplicationConfig config) {
         return
                 Caffeine.newBuilder()
-                        .expireAfterWrite(config.getCacheUpdateTime(), TimeUnit.MILLISECONDS)
+                        .expireAfterWrite(config.getCacheUpdateTime(), TimeUnit.MINUTES)
                         .build();
     }
 
@@ -33,7 +33,7 @@ public class BeanConfiguration {
     public Docket apiDocket() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select() // to get the docket builder (ApiSelectorBuilder)
-                .apis(RequestHandlerSelectors.basePackage("com.bol"))
+                .apis(RequestHandlerSelectors.basePackage("com.bol.mancala"))
                 .paths(PathSelectors.ant("/api/**"))
                 .build()
                 .apiInfo(getApiInfo());

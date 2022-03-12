@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ApplicationConfig {
-    @Value("${mancala.game.cache.update.time.millis}")
+    @Value("${mancala.game.cache.update.time.minutes}")
     private Long cacheUpdateTime;
 
     public Long getCacheUpdateTime() {
