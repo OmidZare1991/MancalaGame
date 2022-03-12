@@ -40,13 +40,13 @@ public class MancalaGameService {
         MancalaGame game = gameRepository.get(gameId);
         if (null == game) {
             LOGGER.error("game with id {} not found", gameId);
-            throw new ResourceNotFoundException("game with id: " + gameId + " not found");
+            throw new ResourceNotFoundException(String.format(ErrorConstants.RESOURCE_NOT_FOUND_EXCEPTION_MESSAGE, gameId));
         }
         if (pitId == null ||
-                pitId < 1 || pitId >= MancalaConstants.LEFT_BIG_PIT_ID ||
-                pitId == MancalaConstants.RIGHT_BIG_PIT_ID
+                pitId < 1 || pitId > MancalaConstants.LEFT_BIG_PIT_ID
+//                || pitId == MancalaConstants.RIGHT_BIG_PIT_ID
         ) {
-            throw new InputInvalidException(ErrorConstants.INPUT_INVALID_EXCEPTION);
+            throw new InputInvalidException(String.format(ErrorConstants.INPUT_INVALID_EXCEPTION_MESSAGE, pitId));
         }
 //        game = this.sow(game, pitId);
         this.sow(game, pitId);
@@ -62,7 +62,7 @@ public class MancalaGameService {
     private MancalaGame sow(MancalaGame game, Integer pitIndex) {
         // No movement on big pits
         if (pitIndex == MancalaConstants.RIGHT_BIG_PIT_ID || pitIndex == MancalaConstants.LEFT_BIG_PIT_ID) {
-            LOGGER.debug("no movement on big pits, id {}", pitIndex);
+            LOGGER.info("no movement on big pits, id {}", pitIndex);
             return game;
         }
 
@@ -70,10 +70,10 @@ public class MancalaGameService {
         if (game.getPlayerTurn() == null) {
 
             if (pitIndex < MancalaConstants.RIGHT_BIG_PIT_ID) {
-                LOGGER.debug("Player {} sows", Players.PLAYER_A);
+                LOGGER.info("Player {} sows", Players.PLAYER_A);
                 game.setPlayerTurn(Players.PLAYER_A);
             } else {
-                LOGGER.debug("Player {} sows", Players.PLAYER_B);
+                LOGGER.info("Player {} sows", Players.PLAYER_B);
                 game.setPlayerTurn(Players.PLAYER_B);
             }
         }
@@ -81,7 +81,7 @@ public class MancalaGameService {
         // check if the player chose the correct pit index
         if (game.getPlayerTurn() == Players.PLAYER_A && pitIndex > MancalaConstants.RIGHT_BIG_PIT_ID ||
                 game.getPlayerTurn() == Players.PLAYER_B && pitIndex < MancalaConstants.RIGHT_BIG_PIT_ID) {
-            LOGGER.debug("Player {} chose the wrong pitIndex {} ", game.getPlayerTurn(), pitIndex);
+            LOGGER.info("Player {} chose the wrong pitIndex {} ", game.getPlayerTurn(), pitIndex);
             return game;
         }
 
@@ -90,7 +90,7 @@ public class MancalaGameService {
         Integer stones = mancalaSelectedPit.getStones();
         // no movement for the empty pit
         if (MancalaConstants.EMPTY_STONE == stones) {
-            LOGGER.debug("pit with pitIndex {} is empty", pitIndex);
+            LOGGER.info("pit with pitIndex {} is empty", pitIndex);
             return game;
         }
 

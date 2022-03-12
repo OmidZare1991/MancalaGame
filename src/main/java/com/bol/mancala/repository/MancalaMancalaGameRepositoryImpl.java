@@ -21,7 +21,7 @@ public class MancalaMancalaGameRepositoryImpl implements MancalaGameRepository {
     @Override
     public MancalaGame get(String id) {
         MancalaGame game = cache.getIfPresent(id);
-        LOGGER.debug("game {} with id {} loaded from cache", game, id);
+        LOGGER.info("game {} with id {} loaded from cache", game, id);
         return game;
     }
 

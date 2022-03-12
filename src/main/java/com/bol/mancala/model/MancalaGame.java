@@ -55,29 +55,13 @@ public class MancalaGame {
         this.currentPitIndex = currentPitIndex;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        MancalaGame that = (MancalaGame) o;
-//        return currentPitIndex == that.currentPitIndex &&
-//                Objects.equals(id, that.id) &&
-//                Objects.equals(pits, that.pits) &&
-//                playerTurn == that.playerTurn;
-//    }
-
-//    @Override
-//    public int hashCode() {
-//        return Objects.hash(id, pits, playerTurn, currentPitIndex);
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return "{" +
-//                "id='" + id + '\'' +
-//                ", pits=" + pits +
-//                ", playerTurn=" + playerTurn +
-//                ", currentPitIndex=" + currentPitIndex +
-//                '}';
-//    }
+    @Override
+    public String toString() {
+        return "{" +
+                "id='" + id + '\'' +
+                ", pits=" + pits +
+                ", playerTurn=" + playerTurn +
+                ", currentPitIndex=" + currentPitIndex +
+                '}';
+    }
 }

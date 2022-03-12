@@ -1,6 +1,6 @@
 package com.bol.mancala.service;
 
-import com.bol.mancala.exception.InputInvalidException;
+import com.bol.mancala.exception.ResourceNotFoundException;
 import com.bol.mancala.model.MancalaGame;
 import com.bol.mancala.repository.MancalaGameRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -96,15 +96,31 @@ public class MancalaGameServiceTest {
         assertEquals(PLAYER_B, this.game.getPlayerTurn());
     }
 
-    @Test
-    @DisplayName("Test when a player chooses his big pit to start sowing")
-    void testWhenBigPitChosenToSow() {
-        String game = "[{id=1, stones=6}, {id=2, stones=6}, {id=3, stones=6}, {id=4, stones=6}, {id=5, stones=6}, {id=6, stones=6}, {id=7, stones=0}, {id=8, stones=6}, {id=9, stones=6}, {id=10, stones=6}, {id=11, stones=6}, {id=12, stones=6}, {id=13, stones=6}, {id=14, stones=0}]";
-        assertThrows(InputInvalidException.class, () -> this.gameService.playGame(this.game.getId(), 7).getPits().toString());
+//    @Test
+//    @DisplayName("Test when a player chooses his big pit to start sowing")
+//    void testWhenBigPitChosenToSow() {
+//        String game = "[{id=1, stones=6}, {id=2, stones=6}, {id=3, stones=6}, {id=4, stones=6}, {id=5, stones=6}, {id=6, stones=6}, {id=7, stones=0}, {id=8, stones=6}, {id=9, stones=6}, {id=10, stones=6}, {id=11, stones=6}, {id=12, stones=6}, {id=13, stones=6}, {id=14, stones=0}]";
+//        assertThrows(InputInvalidException.class, () -> this.gameService.playGame(this.game.getId(), 7).getPits().toString());
+//
+//        //because it is the start of game and playerA wants to start the game, game.PlayerTurn() is null.
+//        assertNull(this.game.getPlayerTurn());
+//        assertEquals(game, this.game.getPits().toString());
+//    }
 
-        //because it is the start of game and playerA wants to start the game, game.PlayerTurn() is null.
-        assertNull(this.game.getPlayerTurn());
-        assertEquals(game, this.game.getPits().toString());
+    @Test
+    @DisplayName(value = "Test when gameId is invalid")
+    void testWhenInvalidPitId() {
+        assertThrows(ResourceNotFoundException.class, () -> this.gameService.playGame("", 1));
     }
 
+    @Test
+    @DisplayName(value = "Test when a player chooses his own big pit to start sowing")
+    void testWhenSelectingBigPitForSowing() {
+        assertEquals("[{id=1, stones=6}, {id=2, stones=0}, {id=3, stones=7}, {id=4, stones=7}, {id=5, stones=7}, {id=6, stones=7}, {id=7, stones=1}, {id=8, stones=7}, {id=9, stones=6}, {id=10, stones=6}, {id=11, stones=6}, {id=12, stones=6}, {id=13, stones=6}, {id=14, stones=0}]", this.gameService.playGame(this.game.getId(), 2).getPits().toString());
+        assertEquals(PLAYER_B, this.game.getPlayerTurn());
+
+        // playerB chooses his big pit to start sowing with
+        assertEquals("[{id=1, stones=6}, {id=2, stones=0}, {id=3, stones=7}, {id=4, stones=7}, {id=5, stones=7}, {id=6, stones=7}, {id=7, stones=1}, {id=8, stones=7}, {id=9, stones=6}, {id=10, stones=6}, {id=11, stones=6}, {id=12, stones=6}, {id=13, stones=6}, {id=14, stones=0}]", this.gameService.playGame(this.game.getId(), 14).getPits().toString());
+        assertEquals(PLAYER_B, this.game.getPlayerTurn());
+    }
 }

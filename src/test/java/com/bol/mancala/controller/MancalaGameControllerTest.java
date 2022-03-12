@@ -20,12 +20,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -121,6 +123,20 @@ public class MancalaGameControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.playerTurn").isEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.currentPitIndex").isEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.pits").isNotEmpty());
+    }
+
+    @Test
+    @DisplayName(value = "Test when sending invalid gameId or pitId to sow API")
+    void testWhenInputsInvalid() throws Exception {
+        //invalid gameId
+        SowDto sowDto = new SowDto("", 1);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/mancala-game/sow")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(sowDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(result -> assertTrue(result.getResolvedException() instanceof MethodArgumentNotValidException));
     }
 
     private static String getJsonString(String path) throws IOException {
