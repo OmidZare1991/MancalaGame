@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 /**
- * I used Aspect to log the requests and responses when endpoints in the controller called.
+ * Using Aspect to log the requests and responses when endpoints in the controller called.
  */
 @Aspect
 @Component
