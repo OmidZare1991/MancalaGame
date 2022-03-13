@@ -24,18 +24,8 @@ public class LogAspect {
             "|| @annotation(org.springframework.web.bind.annotation.GetMapping)"
             , returning = "returnValue")
     public void afterReturning(JoinPoint joinPoint, Object returnValue) {
-
-        Object[] args = joinPoint.getArgs();
-        Object requestValue;
-
-        if (args != null && args.length > 0) {
-            requestValue = args[0];
-        } else {
-            requestValue = null;
-        }
-
         LOGGER.info("invoking method {} with request {} and response {}"
-                , joinPoint.getSignature().getName(), requestValue
+                , joinPoint.getSignature().getName(), joinPoint.getArgs()
                 , returnValue == null ? null : returnValue.toString());
 
     }
@@ -47,10 +37,9 @@ public class LogAspect {
             "|| @annotation(org.springframework.web.bind.annotation.GetMapping)"
             , throwing = "e")
     public void endpointAfterThrowing(JoinPoint joinPoint, Exception e) {
-        Object[] args = joinPoint.getArgs();
         LOGGER.error("Exception: invoking method {} with input {} and response {}"
-                , joinPoint.getSignature().getName(), args.length == 0 ? null : args[0]
-                , e == null ? null : e.toString());
+                , joinPoint.getSignature().getName(), joinPoint.getArgs()
+                , e);
     }
 
 }

@@ -1,0 +1,20 @@
+version: '2'
+services:
+  app:
+    image: bol/mankala-game:latest
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=test
+      - SPRING_CONFIG_LOCATION=file:./app-config/app.properties
+      - DOCKER_INIT_SLEEP=2 # gives time for other services to boot before the application
+      - MANCALA_GAME_CACHE_UPDATE_TIME_MINUTES=60
+      - mancala_game_pit_stones=6
+    volumes:
+      - ./:/app-config
+    ports:
+      - 9095:9095
+#    networks:
+#      - network-app
+#networks:
+#  network-app:
+#    name: bridge192
