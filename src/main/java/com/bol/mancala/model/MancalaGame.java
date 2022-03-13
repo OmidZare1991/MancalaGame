@@ -11,6 +11,15 @@ public class MancalaGame {
     private List<Pit> pits;
     private Players playerTurn;
     private Integer currentPitIndex;
+    private String win;
+
+    public String getWin() {
+        return win;
+    }
+
+    public void setWin(String win) {
+        this.win = win;
+    }
 
     public MancalaGame(String id, List<Pit> pits) {
         this.id = id;
@@ -62,6 +71,7 @@ public class MancalaGame {
                 ", pits=" + pits +
                 ", playerTurn=" + playerTurn +
                 ", currentPitIndex=" + currentPitIndex +
+                ", win='" + win + '\'' +
                 '}';
     }
 }

@@ -24,6 +24,7 @@ public class MancalaGameController {
     private MancalaGameService gameService;
 
     @GetMapping(value = "start/{pitStones}")
+    @CrossOrigin
     @ApiOperation(value = "Endpoint to creat a new Mancala game instance",
             produces = "Application/JSON",
             response = MancalaGame.class, httpMethod = "GET")
@@ -33,6 +34,7 @@ public class MancalaGameController {
 
 
     @PostMapping(value = "sow")
+    @CrossOrigin
     @ApiOperation(value = "Endpoint used for sowing the game. It also maintains the last state of game for consecutive calls",
             produces = "Application/JSON",
             response = MancalaGame.class, httpMethod = "POST")
@@ -41,6 +43,7 @@ public class MancalaGameController {
     }
 
     @GetMapping(value = "last-state/{gameId}")
+    @CrossOrigin
     @ApiOperation(value = "Endpoint used to return the last state of the game",
             produces = "Application/JSON", response = MancalaGame.class, httpMethod = "GET")
     public ResponseEntity<MancalaGame> getLastState(@PathVariable String gameId) {

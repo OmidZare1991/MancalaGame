@@ -52,9 +52,4 @@ public class BeanConfiguration {
         );
     }
 
-//    @Bean
-//    public MethodValidationPostProcessor methodValidationPostProcessor() {
-//        return new MethodValidationPostProcessor();
-//    }
-
 }
