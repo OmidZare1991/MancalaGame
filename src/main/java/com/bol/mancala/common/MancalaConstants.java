@@ -6,7 +6,6 @@ public class MancalaConstants {
     public static final int RIGHT_BIG_PIT_ID = 7;
     public static final int TOTAL_PITS = 14;
     public static final int EMPTY_STONE = 0;
-    public static final int DEFAULT_PIT_STONES = 6;
 
     public static final int FIRST_PIT_PLAYER_A = 1;
     public static final int SECOND_PIT_PLAYER_A = 2;
