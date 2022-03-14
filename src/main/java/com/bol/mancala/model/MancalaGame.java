@@ -1,7 +1,6 @@
 package com.bol.mancala.model;
 
 import com.bol.mancala.common.Players;
-import com.bol.mancala.exception.MancalaException;
 
 import java.util.List;
 
@@ -27,11 +26,11 @@ public class MancalaGame {
     }
 
     // returns the corresponding pit of particular index
-    public Pit getPit(Integer pitIndex) throws MancalaException {
+    public Pit getPit(Integer pitIndex) {
         try {
             return this.pits.get(pitIndex - 1);
         } catch (Exception e) {
-            throw new MancalaException("Invalid pitIndex:" + pitIndex + " has given!");
+            throw new IndexOutOfBoundsException("Invalid pitIndex:" + pitIndex + " has given!");
         }
     }
 

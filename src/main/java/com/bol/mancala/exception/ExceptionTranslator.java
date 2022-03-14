@@ -29,6 +29,11 @@ public class ExceptionTranslator {
         return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = IndexOutOfBoundsException.class)
+    public ResponseEntity<ErrorResponse> getIndexOutOfBoundsException(IndexOutOfBoundsException e) {
+        return new ResponseEntity<>(new ErrorResponse(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> getMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 
