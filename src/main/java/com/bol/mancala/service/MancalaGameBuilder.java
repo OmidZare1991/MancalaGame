@@ -13,11 +13,19 @@ import static com.bol.mancala.common.MancalaConstants.*;
 
 @Service
 public class MancalaGameBuilder {
-
+    /**
+     * @param stonesCount the number of stones to initialize the game with
+     * @return the object of game
+     */
     public MancalaGame getNew(Integer stonesCount) {
         return this.createInstance(UUID.randomUUID().toString(), stonesCount);
     }
 
+    /**
+     * @param id          the game id generated when initializing the game
+     * @param stonesCount the number of stones to initialize the game with
+     * @return the object of game
+     */
     private MancalaGame createInstance(String id, Integer stonesCount) {
         List<Pit> pits = Arrays.asList(
                 new Pit(FIRST_PIT_PLAYER_A, stonesCount),

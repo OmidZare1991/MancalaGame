@@ -12,11 +12,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import static com.bol.mancala.common.ErrorConstants.INPUT_INVALID_EXCEPTION_MESSAGE;
 import static com.bol.mancala.common.MancalaConstants.*;
 import static com.bol.mancala.common.Players.PLAYER_A;
 import static com.bol.mancala.common.Players.PLAYER_B;
@@ -31,18 +31,31 @@ public class MancalaGameService {
     @Autowired
     private MancalaGameRepository gameRepository;
 
-
+    /**
+     * @param pitStonesCount the number of stones to start game with
+     * @return the object of game with the pits filled with the number of 'pitStonesCount' stones
+     */
     public MancalaGame getNewGame(Integer pitStonesCount) {
         MancalaGame game = gameBuilder.getNew(pitStonesCount);
         this.gameRepository.update(game);
         return game;
     }
 
+    /**
+     * @param gameId the id of game generated when the game started
+     * @return the object of game
+     */
     public MancalaGame getGame(String gameId) {
         return this.gameRepository.get(gameId);
     }
 
+    /**
+     * @param gameId the id of game created by the app when game started
+     * @param pitId  the id of selected pit to start sowing from
+     * @return the object of Mancala game
+     */
     public MancalaGame playGame(String gameId, Integer pitId) {
+        // get the last object of game (last state) from the repository
         MancalaGame game = gameRepository.get(gameId);
         if (null == game) {
             LOGGER.error("game with id {} not found", gameId);
@@ -50,19 +63,21 @@ public class MancalaGameService {
         }
         if (pitId == null ||
                 pitId < 1 || pitId > LEFT_BIG_PIT_ID
-//                || pitId == MancalaConstants.RIGHT_BIG_PIT_ID
         ) {
-            throw new InputInvalidException(String.format(ErrorConstants.INPUT_INVALID_EXCEPTION_MESSAGE, pitId));
+            LOGGER.error("input {} is not valid", pitId);
+            throw new InputInvalidException(String.format(INPUT_INVALID_EXCEPTION_MESSAGE, pitId));
         }
-        game = this.sow(game, pitId);
-//        this.sow(game, pitId);
+//        game = this.sow(game, pitId);
+
+        this.sow(game, pitId);
+        // update the repository when sowing is finished to keep the last state of game for next round
         gameRepository.update(game);
         return game;
     }
 
     /**
-     * @param game     MancalaGame instance
-     * @param pitIndex performing sowing the game on this requested pitIndex
+     * @param game     MancalaGame object
+     * @param pitIndex The requested pitIndex which the player selected to start sowing from
      * @return returning MancalaGame instance
      */
     private MancalaGame sow(MancalaGame game, Integer pitIndex) {
@@ -72,7 +87,7 @@ public class MancalaGameService {
             return game;
         }
 
-        // setting the player turn for the first move of the game based on the requested pit id
+        // setting the player turn based on the selected pitId when game is started by one the players
         if (game.getPlayerTurn() == null) {
 
             if (pitIndex < RIGHT_BIG_PIT_ID) {
@@ -100,10 +115,10 @@ public class MancalaGameService {
             return game;
         }
 
-        // the selected pit must be empty after the stones are got off
+        // the selected pit stones is set to empty when the player selects the pit to start sowing
         mancalaSelectedPit.setStones(EMPTY_STONE);
 
-        // keep the pit index, used for sowing the stones in right pits
+        // keep the current pit index, needed for sowing the stones in right pits
         game.setCurrentPitIndex(pitIndex);
 
         //sow all stones except the last one
@@ -113,15 +128,18 @@ public class MancalaGameService {
 
         int currentPitIndex = game.getCurrentPitIndex();
 
-        // change the player's turn if the last sow was not on any of pit big pits (left or right)
+        // change the player's turn if the last stone does not lands on the current player's pit
         if (currentPitIndex != RIGHT_BIG_PIT_ID && currentPitIndex != LEFT_BIG_PIT_ID)
             game.setPlayerTurn(changeTurns(game.getPlayerTurn()));
 
         // check if game is finished or not. if so, returning the name of winner in game object
-        return getFinalGameState(game);
-//        return game;
+        return getGameState(game);
     }
 
+    /**
+     * @param game        MancalaGame object
+     * @param isLastStone the boolean value representing if it is the last sowing stone
+     */
     private void sowRight(MancalaGame game, boolean isLastStone) {
 
         // the pitIndex to start sowing from
@@ -138,10 +156,9 @@ public class MancalaGameService {
         game.setCurrentPitIndex(currentPitIndex);
         Pit pit = game.getPit(currentPitIndex);
 
-        // it's not the last stone or it is either of big pits' index ( (!isLastStone means the condition is ok
-        // for all indexes except big pits, and the other two conditions  checks for the big ones)
-        // when it is not the last stone, three possible conditions occur(1. it lands on either of big pits,
-        // conditions 2 and 3 will be checked in next lines of code after this if condition)
+
+        // it is not the last stone and it lands on the player's middle pits or big pit
+        // it is the last stone but it lands on the player's big pit
         if (!isLastStone || currentPitIndex == RIGHT_BIG_PIT_ID ||
                 currentPitIndex == LEFT_BIG_PIT_ID) {
             pit.sow();
@@ -149,44 +166,60 @@ public class MancalaGameService {
         }
 
         // It's the last stone and we need to check the opposite player's pit status
-
+        // we need this pit's stones count to be added to the player's pit if the last stone
+        //lands on the player's empty pit
         Pit oppositePit = game.getPit(TOTAL_PITS - currentPitIndex);
 
 
-        //when the last stone lands in an own empty pit,the player captures his own stones and all stones in the opposite pit
+        //when the last stone lands in an own empty pit,the player captures his last stone and all stones in the opposite pit
         //and puts them in his big pit
-        if (pit.isEmpty()) {
+        if (pit.isEmpty() && isOwnEmptyPit(pit.getId(), player)) {
 
-            if (isOwnPitEmpty(pit.getId(), player)) {
-                Integer oppositeStones = oppositePit.getStones();
-                oppositePit.clear();
-                Integer bigPitIndex = currentPitIndex < RIGHT_BIG_PIT_ID ? RIGHT_BIG_PIT_ID : LEFT_BIG_PIT_ID;
-                Pit bigPit = game.getPit(bigPitIndex);
-                bigPit.addStones(oppositeStones + 1);
-                return;
-            }
+            Integer oppositeStones = oppositePit.getStones();
+            oppositePit.clear();
+            Integer bigPitIndex = currentPitIndex < RIGHT_BIG_PIT_ID ? RIGHT_BIG_PIT_ID : LEFT_BIG_PIT_ID;
+            Pit bigPit = game.getPit(bigPitIndex);
+            bigPit.addStones(1 + oppositeStones);
+            return;
         }
 
-        // when it is the last stone and it lands on the opponent's empty pit
+        // when it is the last stone and it lands on the opponent's (empty  or non empty) pit
         pit.sow();
     }
 
-    private boolean isOwnPitEmpty(int id, Players players) {
-        if ((players == PLAYER_A && id < 7) || (players == PLAYER_B && id > 7 && id < 14)) {
-            return true;
-        }
-        return false;
+
+    /**
+     * @param id      the index of empty pit in which last stone landed
+     * @param players the current player
+     * @return boolean value showing if the empty pit is the current player's pit, not the opponent's
+     */
+    private boolean isOwnEmptyPit(int id, Players players) {
+        return (players == PLAYER_A && id < 7) || (players == PLAYER_B && id > 7 && id < 14);
     }
 
+    /**
+     * @param currentTurn Player Enum showing the current player's turn
+     * @return change the turn to the next player
+     */
     private Players changeTurns(Players currentTurn) {
         return currentTurn == PLAYER_A ? PLAYER_B : PLAYER_A;
     }
 
-    public MancalaGame getFinalGameState(MancalaGame game) {
+
+    /**
+     * @param game MancalaGame object
+     * @return if the game is not finished, an object of game without change is returned
+     * if the game is finished, the stones in players' big pits are counted to check which player is the winner
+     * Then,the game object showing the winner (instance variable 'win' set to winner's name) is returned
+     */
+    private MancalaGame getGameState(MancalaGame game) {
 
 
-        boolean playerAPits = isAllPitsEmpty(FIRST_PIT_PLAYER_A, SIXTH_PIT_PLAYER_A, game);
-        boolean playerBPits = isAllPitsEmpty(FIRST_PIT_PLAYER_B, SIXTH_PIT_PLAYER_B, game);
+        //check if all playerA's six pits are empty
+        boolean playerAPits = isAllSixPitsEmpty(FIRST_PIT_PLAYER_A, SIXTH_PIT_PLAYER_A, game);
+
+        //check if all playerB's six pits are empty
+        boolean playerBPits = isAllSixPitsEmpty(FIRST_PIT_PLAYER_B, SIXTH_PIT_PLAYER_B, game);
 
 
         // if no player finished sowing
@@ -215,17 +248,24 @@ public class MancalaGameService {
         return game;
     }
 
-    private boolean isAllPitsEmpty(int startPoint, int endPoint, MancalaGame game) {
-        // a predicate checking that pits are empty (have no stones) for each player
+
+    /**
+     * @param startPoint the index of current player's first pit
+     * @param endPoint   the index of curent player's last pit
+     * @param game       MancalaGame object
+     * @return boolean value showing if all six pits of that player are empty
+     */
+    private boolean isAllSixPitsEmpty(int startPoint, int endPoint, MancalaGame game) {
+        // a predicate of type Pit and use lambda expression to check that
+        // all player's six pits are empty (have no stones) for each player
         Predicate<Pit> playerPits = pit -> (pit.getId() >= startPoint && pit.getId() <= endPoint && pit.isEmpty());
 
-        // get the list of all pits with zero pit stones
-        List<Pit> result = game.getPits()
+        // comparing the number of empty pits of either player with number 6
+        // to check if all player's six pits are empty
+        return game.getPits()
                 .stream()
                 .filter(playerPits)
-                .collect(Collectors.toList());
-        // comparing the result size with the number the pits in front of each player
-        return result.size() == 6;
+                .collect(Collectors.toList()).size() == 6;
 
     }
 

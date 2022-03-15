@@ -8,16 +8,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MancalaMancalaGameRepositoryImpl implements MancalaGameRepository {
-    private static final Logger LOGGER = LoggerFactory.getLogger(MancalaMancalaGameRepositoryImpl.class);
+public class MancalaGameRepositoryImpl implements MancalaGameRepository {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MancalaGameRepositoryImpl.class);
     @Autowired
     private Cache<String, MancalaGame> cache;
 
+    /**
+     * @param game the game object which is kept in cache repository
+     */
     @Override
     public void update(MancalaGame game) {
         cache.put(game.getId(), game);
     }
 
+    /**
+     * @param id the game id
+     * @return the objcet of game
+     */
     @Override
     public MancalaGame get(String id) {
         MancalaGame game = cache.getIfPresent(id);
