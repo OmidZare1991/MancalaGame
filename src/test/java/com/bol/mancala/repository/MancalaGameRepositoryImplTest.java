@@ -1,5 +1,6 @@
 package com.bol.mancala.repository;
 
+import com.bol.mancala.exception.ResourceNotFoundException;
 import com.bol.mancala.model.MancalaGame;
 import com.bol.mancala.service.MancalaGameBuilder;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,8 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class MancalaGameRepositoryImplTest {
@@ -33,5 +33,11 @@ public class MancalaGameRepositoryImplTest {
     void testRepository() {
         assertNotNull(this.gameRepository.get(this.game.getId()));
         assertEquals(this.game, this.gameRepository.get(this.game.getId()));
+    }
+
+    @Test
+    @DisplayName(value = "Test when id is not found in the repository")
+    void testRepositoryWhenIdNotFound() {
+        assertThrows(ResourceNotFoundException.class, () -> this.gameRepository.get("sdfghjkl"));
     }
 }

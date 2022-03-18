@@ -126,6 +126,16 @@ public class MancalaGameControllerTest {
     }
 
     @Test
+    @DisplayName(value = "Test home endpoint")
+    void testHomeEndpoint() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/mancala-game/home")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/html;charset=UTF-8"));
+    }
+
+    @Test
     @DisplayName(value = "Test when sending invalid gameId or pitId to sow API")
     void testWhenInputsInvalid() throws Exception {
         //invalid gameId
