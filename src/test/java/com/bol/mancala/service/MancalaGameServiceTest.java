@@ -51,7 +51,7 @@ public class MancalaGameServiceTest {
 
         assertEquals(6, this.game.getPit(1).getStones());
 
-        // in this case, the last stone lands in his big(playerA) pit, so he will have another chance to start.
+        // in this case, the last stone lands in his big(playerA) pit, so he will have another chance to sow again.
         assertEquals("[{id=1, stones=0}, {id=2, stones=7}, {id=3, stones=7}, {id=4, stones=7}, {id=5, stones=7}, {id=6, stones=7}, {id=7, stones=1}, {id=8, stones=6}, {id=9, stones=6}, {id=10, stones=6}, {id=11, stones=6}, {id=12, stones=6}, {id=13, stones=6}, {id=14, stones=0}]", this.gameService.playGame(this.game.getId(), 1).getPits().toString());
         assertEquals(PLAYER_A, this.game.getPlayerTurn());
 
