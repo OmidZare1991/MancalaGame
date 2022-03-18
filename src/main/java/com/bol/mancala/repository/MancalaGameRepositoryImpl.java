@@ -1,13 +1,15 @@
 package com.bol.mancala.repository;
 
+import com.bol.mancala.common.ErrorConstants;
+import com.bol.mancala.exception.ResourceNotFoundException;
 import com.bol.mancala.model.MancalaGame;
 import com.github.benmanes.caffeine.cache.Cache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 public class MancalaGameRepositoryImpl implements MancalaGameRepository {
     private static final Logger LOGGER = LoggerFactory.getLogger(MancalaGameRepositoryImpl.class);
     @Autowired
@@ -28,7 +30,11 @@ public class MancalaGameRepositoryImpl implements MancalaGameRepository {
     @Override
     public MancalaGame get(String id) {
         MancalaGame game = cache.getIfPresent(id);
-        LOGGER.info("game {} with id {} loaded from cache", game, id);
+
+        if (null == game) {
+            LOGGER.error("game with id {} not found", id);
+            throw new ResourceNotFoundException(String.format(ErrorConstants.RESOURCE_NOT_FOUND_EXCEPTION_MESSAGE, id));
+        }
         return game;
     }
 

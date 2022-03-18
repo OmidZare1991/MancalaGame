@@ -34,6 +34,4 @@ public class MancalaGameRepositoryImplTest {
         assertNotNull(this.gameRepository.get(this.game.getId()));
         assertEquals(this.game, this.gameRepository.get(this.game.getId()));
     }
-
-
 }

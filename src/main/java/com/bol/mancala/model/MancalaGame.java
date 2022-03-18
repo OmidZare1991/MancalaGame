@@ -10,14 +10,14 @@ public class MancalaGame {
     private List<Pit> pits;
     private Players playerTurn;
     private Integer currentPitIndex;
-    private String win;
+    private String winner;
 
-    public String getWin() {
-        return win;
+    public String getWinner() {
+        return winner;
     }
 
-    public void setWin(String win) {
-        this.win = win;
+    public void setWinner(String winner) {
+        this.winner = winner;
     }
 
     public MancalaGame(String id, List<Pit> pits) {
@@ -70,7 +70,7 @@ public class MancalaGame {
                 ", pits=" + pits +
                 ", playerTurn=" + playerTurn +
                 ", currentPitIndex=" + currentPitIndex +
-                ", win='" + win + '\'' +
+                ", winner='" + winner + '\'' +
                 '}';
     }
 }

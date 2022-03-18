@@ -1,7 +1,7 @@
 package com.bol.mancala.common;
 
 public enum Players {
-    PLAYER_A("A"), PLAYER_B("B");
+    PLAYER_A("PLAYER_A"), PLAYER_B("PLAYER_B");
 
     private String turn;
 

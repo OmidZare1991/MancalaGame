@@ -1,0 +1,29 @@
+.selector-for-some-widget {
+    box-sizing: content-box;
+}
+
+.a {
+    background-color: rgb(245, 195, 195);
+
+}
+
+.b {
+    background-color: rgb(187, 187, 233);
+
+
+}
+
+.c {
+    background-color: rgb(221, 221, 154);
+
+
+}
+
+.card {
+    margin-top: 2rem;
+}
+
+.w-16 {
+    width: 15% !important;
+}
+
